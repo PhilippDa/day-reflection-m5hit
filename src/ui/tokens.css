@@ -1,3 +1,12 @@
+/* Cookie for headlines (SIL Open Font License), latin subset, bundled so it also works offline. */
+@font-face {
+  font-family: "Cookie";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/cookie-latin.woff2") format("woff2");
+}
+
 /* Bullet-journal paper: cream sheet with a faint dot grid, soft outlines, handwriting titles. Light only. */
 :root {
   color-scheme: light;
@@ -29,6 +38,8 @@
   --tap-min: 44px;
   --font: system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-hand: "Bradley Hand", "Noteworthy", "Segoe Print", "Comic Sans MS", cursive;
+  /* Headlines only. */
+  --font-headline: "Cookie", var(--font-hand);
 }
 
 *,
@@ -55,10 +66,24 @@ body {
   outline-offset: 2px;
 }
 
+/* Cookie is small for its size, so the headlines are set larger than usual. */
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
 h1,
 h2,
 h3 {
-  font-family: var(--font-hand);
-  font-weight: 700;
+  font-family: var(--font-headline);
+  /* Cookie has one weight, a browser-made bold would only smear it. */
+  font-weight: 400;
   letter-spacing: 0;
 }
