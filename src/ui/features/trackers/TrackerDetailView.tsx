@@ -22,6 +22,7 @@ import { useStore } from "../../StoreContext";
 import { LogItems } from "../log";
 import { DaySheet } from "./DaySheet";
 import styles from "./TrackersView.module.css";
+import { Icon } from "../../icons";
 
 const UNKNOWN_COLOR = "#9a9a9a";
 
@@ -46,11 +47,11 @@ function PeriodNav({ label, previousLabel, nextLabel, canGoNext, onPrevious, onN
   return (
     <div class={styles["yearNav"] ?? ""}>
       <Button variant="secondary" onClick={onPrevious}>
-        {`‹ ${previousLabel}`}
+        <Icon name="chevron_left" /> {previousLabel}
       </Button>
       <strong class={styles["year"] ?? ""}>{label}</strong>
       <Button variant="secondary" disabled={!canGoNext} onClick={onNext}>
-        {`${nextLabel} ›`}
+        {nextLabel} <Icon name="chevron_right" />
       </Button>
     </div>
   );
@@ -75,11 +76,11 @@ export function TrackerDetailView({ tracker }: { readonly tracker: Tracker }) {
 
   return (
     <main class={styles["page"] ?? ""}>
-      <Button variant="ghost" onClick={store.closeTracker}>
-        {de.trackers.back}
+      <Button variant="ghost" label={de.trackers.backLabel} onClick={store.closeTracker}>
+        <Icon name="chevron_left" /> {de.trackers.back}
       </Button>
       <h1 class={styles["detailTitle"] ?? ""}>
-        <span aria-hidden="true">{tracker.icon}</span> {tracker.title}
+        <Icon name={tracker.icon} /> {tracker.title}
       </h1>
 
       {tracker.kind === "log" ? null : isMonthView ? (

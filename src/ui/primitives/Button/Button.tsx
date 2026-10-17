@@ -6,6 +6,8 @@ export interface ButtonProps {
   readonly type?: "button" | "submit";
   readonly disabled?: boolean;
   readonly expanded?: boolean;
+  /** Only when the visible text alone does not say enough. */
+  readonly label?: string;
   readonly onClick?: () => void;
   readonly children: ComponentChildren;
 }
@@ -15,6 +17,7 @@ export function Button({
   type = "button",
   disabled = false,
   expanded,
+  label,
   onClick,
   children,
 }: ButtonProps) {
@@ -24,6 +27,7 @@ export function Button({
       class={`${styles["button"] ?? ""} ${styles[variant] ?? ""}`}
       disabled={disabled}
       aria-expanded={expanded}
+      aria-label={label}
       onClick={onClick}
     >
       {children}

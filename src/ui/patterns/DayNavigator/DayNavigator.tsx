@@ -2,6 +2,7 @@ import { de } from "../../../i18n/de";
 import { Button } from "../../primitives/Button";
 import { DayHeader } from "../DayHeader";
 import styles from "./DayNavigator.module.css";
+import { Icon } from "../../icons";
 
 export interface DayNavigatorProps {
   readonly title: string;
@@ -28,10 +29,10 @@ export function DayNavigator({
       <DayHeader title={title} {...(subtitle === undefined ? {} : { subtitle })} />
       <div class={styles["buttons"] ?? ""}>
         <Button variant="secondary" onClick={onPrevious}>
-          {`‹ ${de.dayNav.previous}`}
+          <Icon name="chevron_left" /> {de.dayNav.previous}
         </Button>
         <Button variant="secondary" disabled={!canGoNext} onClick={onNext}>
-          {`${de.dayNav.next} ›`}
+          {de.dayNav.next} <Icon name="chevron_right" />
         </Button>
         {isToday ? null : (
           <Button variant="ghost" onClick={onToday}>

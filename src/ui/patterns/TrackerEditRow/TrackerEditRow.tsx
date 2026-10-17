@@ -1,4 +1,5 @@
 import styles from "./TrackerEditRow.module.css";
+import { Icon } from "../../icons";
 
 export interface TrackerEditRowProps {
   readonly title: string;
@@ -28,7 +29,7 @@ export function TrackerEditRow({
   return (
     <div class={styles["row"] ?? ""}>
       <button type="button" class={styles["open"] ?? ""} aria-label={editLabel} onClick={onEdit}>
-        <span aria-hidden="true">{icon}</span>
+        <Icon name={icon} />
         <span class={styles["title"] ?? ""}>{title}</span>
       </button>
       <span class={styles["moves"] ?? ""}>

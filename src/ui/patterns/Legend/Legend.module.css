@@ -21,3 +21,7 @@
   font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
+
+.icon {
+  margin-right: var(--space-1);
+}

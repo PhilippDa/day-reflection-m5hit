@@ -1,4 +1,5 @@
 import styles from "./StarRating.module.css";
+import { Icon } from "../../icons";
 
 export interface StarRatingProps {
   /** 0 to 5, where 0 means unrated. */
@@ -30,7 +31,7 @@ export function StarRating({ value, label, starLabel, onChange }: StarRatingProp
               onChange(stars === value ? 0 : stars);
             }}
           >
-            <span aria-hidden="true">{stars <= value ? "★" : "☆"}</span>
+            <Icon name={stars <= value ? "star_fill" : "star"} />
           </button>
         ))}
       </div>

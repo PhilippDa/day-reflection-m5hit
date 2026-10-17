@@ -1,5 +1,6 @@
 import type { ComponentChildren } from "preact";
 import styles from "./TrackerListItem.module.css";
+import { Icon } from "../../icons";
 
 export interface TrackerListItemProps {
   readonly title: string;
@@ -15,16 +16,16 @@ export interface TrackerListItemProps {
 export function TrackerListItem({ title, icon, detail, onOpen, children }: TrackerListItemProps) {
   return (
     <button type="button" class={styles["item"] ?? ""} onClick={onOpen}>
-      <span class={styles["icon"] ?? ""} aria-hidden="true">
-        {icon}
+      <span class={styles["icon"] ?? ""}>
+        <Icon name={icon} />
       </span>
       <span class={styles["text"] ?? ""}>
         <span class={styles["title"] ?? ""}>{title}</span>
         <span class={styles["detail"] ?? ""}>{detail}</span>
         {children}
       </span>
-      <span class={styles["chevron"] ?? ""} aria-hidden="true">
-        ›
+      <span class={styles["chevron"] ?? ""}>
+        <Icon name="chevron_right" />
       </span>
     </button>
   );

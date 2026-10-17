@@ -26,13 +26,13 @@ function row(overrides: Partial<OptionEditRowProps> = {}) {
 }
 
 describe("OptionEditRow", () => {
-  it("edits label, emoji and color", () => {
+  it("edits label, icon and color", () => {
     const { onChange } = row();
     fireEvent.input(screen.getByLabelText("Bezeichnung"), { target: { value: "Heiter" } });
-    fireEvent.input(screen.getByLabelText("Symbol"), { target: { value: "🌞" } });
+    fireEvent.click(screen.getByRole("button", { name: "Regen" }));
     fireEvent.click(screen.getByRole("button", { name: "Rot" }));
     expect(onChange).toHaveBeenCalledWith({ label: "Heiter" });
-    expect(onChange).toHaveBeenCalledWith({ icon: "🌞" });
+    expect(onChange).toHaveBeenCalledWith({ icon: "rainy" });
     expect(onChange).toHaveBeenCalledWith({ color: "#d64550" });
   });
 

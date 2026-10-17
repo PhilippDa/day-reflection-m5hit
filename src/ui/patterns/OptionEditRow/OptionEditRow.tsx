@@ -9,6 +9,9 @@ import { Select } from "../../primitives/Select";
 import { DraftTextField } from "../../primitives/DraftTextField";
 import { ColorPalette } from "../ColorPalette";
 import styles from "./OptionEditRow.module.css";
+import { ICON_NAMES } from "../../../domain/icons";
+import { iconName } from "../../../i18n/format";
+import { IconPicker } from "../IconPicker";
 
 export interface OptionEditRowProps {
   readonly option: Option;
@@ -24,7 +27,7 @@ export interface OptionEditRowProps {
   readonly onDelete: () => void;
 }
 
-/** One legend entry in the editor: name, emoji, color, order and delete. */
+/** One legend entry in the editor: name, icon, color, order and delete. */
 export function OptionEditRow({
   option,
   showShape = false,
@@ -46,11 +49,13 @@ export function OptionEditRow({
             onChange({ label });
           }}
         />
-        <DraftTextField
+        <IconPicker
           label={de.editor.optionIconLabel}
           value={option.icon}
-          allowEmpty
-          onCommit={(icon) => {
+          names={ICON_NAMES}
+          nameOf={iconName}
+          noneLabel={de.editor.iconNone}
+          onChange={(icon) => {
             onChange({ icon });
           }}
         />

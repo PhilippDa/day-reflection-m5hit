@@ -35,7 +35,7 @@ Your original needs fit in: "washed hair" and "washing machine" become the showe
 
 ## Concept
 
-A **tracker** has a title, an emoji, a **kind** (what you record each day) and a **view** (how it is drawn).
+A **tracker** has a title, an icon (Material Symbols, picked from a grid), a **kind** (what you record each day) and a **view** (how it is drawn).
 
 | Kind     | What you record                                  | Allowed views                                     |
 | -------- | ------------------------------------------------ | ------------------------------------------------- |
@@ -43,7 +43,7 @@ A **tracker** has a title, an emoji, a **kind** (what you record each day) and a
 | `habits` | Any number of habits per day (each with a shape) | board                                             |
 | `log`    | A list of items: date, title, 1 to 5 stars, note | list                                              |
 
-The **legend** is a list of options. Each option has a label, a color, an optional emoji icon, and for habits a block shape. Everything is user-editable: trackers, options, colors, order.
+The **legend** is a list of options. Each option has a label, a color, an optional icon, and for habits a block shape. Everything is user-editable: trackers, options, colors, order.
 
 ## Screens
 

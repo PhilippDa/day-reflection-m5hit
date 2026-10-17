@@ -26,13 +26,13 @@ Phase 1, a checklist with an evening review, was built but never deployed and is
 
 ## Concepts
 
-- **Tracker:** title, emoji, a `kind` and a `view`.
+- **Tracker:** title, icon, a `kind` and a `view`. An icon is a Material Symbols Rounded name from `ICON_NAMES` (`domain/icons.ts`), drawn from `src/ui/icons/paths.ts` (no network, see `NOTICES.md`). Old emoji still show as text, and the starter emoji are swapped for icons on load (`modernizeIcons`). Adding an icon means: name in `ICON_NAMES`, path in `paths.ts`, German label in `de.icons`.
 - **Kind** says what is recorded per day:
   - `choice`: one option from the legend per day (weather, stress, rating, sleep hours, shower, dream, steps, period).
   - `habits`: any number of habits per day, each with a block shape (the Tetris-style board).
   - `log`: a list of items with date, title, 1 to 5 stars and a note (movie review).
 - **View** says how it is drawn: `year-squares`, `year-dots`, `month-ring`, `month-stamps` (all for `choice`), `board` (for `habits`), `list` (for `log`).
-- **Option (legend entry):** id, label, color (`#rrggbb`), optional emoji icon, and for habits a shape.
+- **Option (legend entry):** id, label, color (`#rrggbb`), optional icon (see above), and for habits a shape.
 - **Marks:** which options were picked on which day.
 
 ## Data model (schema version 2)
@@ -93,7 +93,7 @@ Rules:
 
 - **Heute (today):** one card per tracker. `choice`: legend chips, tap to set, tap again to clear. `habits`: chips to switch on and off. `log`: "Eintrag hinzufügen". Open trackers are marked, the header shows how many are filled. Day navigation back in time, never past today. Notes are the preset `Notizen`: a `log` tracker with `entries: "text"` (date and text, no title or stars). There is no separate note field on Today. Adding that tracker turns old day notes (`days[date].note`) into entries and clears them (`adoptDayNotes`).
 - **Trackers:** overview cards with a small preview. The detail screen shows the full view (year grid, month ring, stamps, board or list), the legend with counts, year or month navigation, and a bottom sheet to edit a tapped day.
-- **Einstellungen:** create a tracker from a preset or from scratch, edit title, emoji, view and options (label, color, icon), reorder, delete. Export, import, last-export date.
+- **Einstellungen:** create a tracker from a preset or from scratch, edit title, icon (tap-to-pick grid), view and options (label, color, icon), reorder, delete. Export, import, last-export date.
 - **First start:** a gallery of presets to tick. No tracker is preloaded. The period preset is never selected by default.
 - **Design:** bullet-journal paper. Cream background with a faint dot grid, thin, soft cell borders, handwriting-style titles from fonts already on iOS (`"Bradley Hand"`, `"Noteworthy"`, then cursive), a marker palette of about 16 colors as tokens, coral accent. Light only, no dark mode. Outlines use the soft `--color-ink` token, selected states `--color-strong`.
 

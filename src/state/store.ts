@@ -17,6 +17,7 @@ import {
   type LogItemPatch,
 } from "../domain/logs";
 import { adoptDayNotes } from "../domain/adopt";
+import { modernizeIcons } from "../domain/icons";
 import { toggleChoice, toggleHabit } from "../domain/marks";
 import type { ImportMode } from "../domain/merge";
 import type { ParseError } from "../domain/parse";
@@ -434,7 +435,8 @@ export function createStore(deps: StoreDeps): Store {
       try {
         const result = await repository.load();
         if (result.ok) {
-          document.value = result.value;
+          // Older data has emoji where icons are now used. The swapped version is saved with the next change.
+          document.value = modernizeIcons(result.value);
           lastExportedAt.value = await repository
             .loadMeta()
             .then((meta) => meta.lastExportedAt)
@@ -671,7 +673,7 @@ export function createStore(deps: StoreDeps): Store {
         document.value = await importDocument(repository, current, pending.incoming, mode);
         saveFailed.value = false;
         // Notes from an older backup become entries of the notes tracker, when there is one.
-        change((doc) => adoptDayNotes(doc, newId));
+        change((doc) => modernizeIcons(adoptDayNotes(doc, newId)));
       } catch {
         saveFailed.value = true;
       }

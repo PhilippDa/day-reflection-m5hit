@@ -756,3 +756,31 @@ describe("old day notes", () => {
     expect(saved.ok && saved.value.days["2026-10-01"]?.note).toBe("Erster");
   });
 });
+
+describe("icons from older data", () => {
+  it("swaps old starter emoji when loading, and keeps emoji the user typed", async () => {
+    const port = createMemoryPort();
+    const doc = documentWith("weather");
+    const tracker = doc.trackers[0];
+    if (!tracker) {
+      throw new Error("fixture missing");
+    }
+    await port.write("current", {
+      ...doc,
+      trackers: [
+        {
+          ...tracker,
+          icon: "🌤️",
+          options: tracker.options.map((option, i) => ({ ...option, icon: i === 0 ? "☀️" : "🌞" })),
+        },
+      ],
+    });
+    const { store } = setup({ port });
+    await store.load();
+    const loaded = store.trackers.value[0];
+    expect(loaded?.icon).toBe("partly_cloudy_day");
+    expect(loaded?.options.map((option) => option.icon)).toEqual(
+      tracker.options.map((_option, i) => (i === 0 ? "sunny" : "🌞")),
+    );
+  });
+});

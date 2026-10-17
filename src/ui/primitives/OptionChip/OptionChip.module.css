@@ -23,6 +23,6 @@
   font-weight: 700;
 }
 
-.selected::after {
-  content: "✓" / "";
+.check {
+  margin-left: calc(var(--space-1) * -1);
 }

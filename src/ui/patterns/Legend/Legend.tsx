@@ -2,6 +2,7 @@ import type { Option } from "../../../domain/types";
 import { ColorSwatch } from "../../primitives/ColorSwatch";
 import { ShapeIcon } from "../../primitives/ShapeIcon";
 import styles from "./Legend.module.css";
+import { Icon } from "../../icons";
 
 export interface LegendItem {
   readonly id: string;
@@ -32,7 +33,7 @@ export function Legend({ items, unknownCount = 0, unknownLabel }: LegendProps) {
             <ShapeIcon shape={item.shape} color={item.color} />
           )}
           <span class={styles["label"] ?? ""}>
-            {item.icon === "" ? "" : `${item.icon} `}
+            {item.icon === "" ? null : <Icon name={item.icon} class={styles["icon"] ?? ""} />}
             {item.label}
           </span>
           <span class={styles["count"] ?? ""}>{item.count}</span>

@@ -1,4 +1,5 @@
 import styles from "./PresetRow.module.css";
+import { Icon } from "../../icons";
 
 export interface PresetRowProps {
   readonly title: string;
@@ -32,8 +33,8 @@ export function PresetRow({
           onChange(event.currentTarget.checked);
         }}
       />
-      <span class={styles["icon"] ?? ""} aria-hidden="true">
-        {icon}
+      <span class={styles["icon"] ?? ""}>
+        <Icon name={icon} />
       </span>
       <span class={styles["text"] ?? ""}>
         <span class={styles["title"] ?? ""}>{title}</span>

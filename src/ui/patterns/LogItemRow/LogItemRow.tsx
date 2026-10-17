@@ -1,4 +1,5 @@
 import styles from "./LogItemRow.module.css";
+import { Icon } from "../../icons";
 
 export interface LogItemRowProps {
   readonly title: string;
@@ -21,7 +22,14 @@ export function LogItemRow({ title, date, rating, note, editLabel, onEdit }: Log
       {title === "" ? null : <span class={styles["title"] ?? ""}>{title}</span>}
       <span class={styles["meta"] ?? ""}>
         {date}
-        {rating === 0 ? "" : ` · ${"★".repeat(rating)}${"☆".repeat(5 - rating)}`}
+        {rating === 0 ? null : (
+          <>
+            {" · "}
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Icon key={star} name={star <= rating ? "star_fill" : "star"} />
+            ))}
+          </>
+        )}
       </span>
       {note === "" ? null : (
         <span class={`${styles["note"] ?? ""} ${title === "" ? (styles["clamped"] ?? "") : ""}`}>

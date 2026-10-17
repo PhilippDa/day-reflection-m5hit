@@ -8,6 +8,9 @@ import { TextField } from "../../primitives/TextField";
 import { ToggleGroup } from "../../primitives/ToggleGroup";
 import { useStore } from "../../StoreContext";
 import styles from "./Editor.module.css";
+import { ICON_NAMES } from "../../../domain/icons";
+import { iconName } from "../../../i18n/format";
+import { IconPicker } from "../../patterns/IconPicker";
 
 const KINDS: readonly TrackerKind[] = ["choice", "habits", "log"];
 
@@ -16,11 +19,11 @@ export interface NewTrackerFormProps {
   readonly onCreated: (trackerId: string) => void;
 }
 
-/** Name, emoji and kind: the three things that cannot be changed later (kind) or start every tracker. */
+/** Name, icon and kind: the three things that cannot be changed later (kind) or start every tracker. */
 export function NewTrackerForm({ onCreated }: NewTrackerFormProps) {
   const store = useStore();
   const [title, setTitle] = useState("");
-  const [icon, setIcon] = useState("✨");
+  const [icon, setIcon] = useState("auto_awesome");
   const [kind, setKind] = useState<TrackerKind>("choice");
 
   function create() {
@@ -55,7 +58,14 @@ export function NewTrackerForm({ onCreated }: NewTrackerFormProps) {
         placeholder={de.create.namePlaceholder}
         onInput={setTitle}
       />
-      <TextField label={de.editor.iconLabel} value={icon} onInput={setIcon} />
+      <IconPicker
+        label={de.editor.iconLabel}
+        value={icon}
+        names={ICON_NAMES}
+        nameOf={iconName}
+        noneLabel={de.editor.iconNone}
+        onChange={setIcon}
+      />
       <ToggleGroup
         label={de.create.kindLabel}
         options={KINDS.map((value) => ({ value, label: de.create.kinds[value] }))}

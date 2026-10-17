@@ -1,6 +1,7 @@
 import type { ComponentChildren } from "preact";
 import { useId } from "preact/hooks";
 import styles from "./TrackerCard.module.css";
+import { Icon } from "../../icons";
 
 export interface TrackerCardProps {
   readonly title: string;
@@ -16,7 +17,7 @@ export function TrackerCard({ title, icon, badge = "", children }: TrackerCardPr
   return (
     <section class={styles["card"] ?? ""} aria-labelledby={headingId}>
       <h2 class={styles["title"] ?? ""} id={headingId}>
-        <span aria-hidden="true">{icon}</span> {title}
+        <Icon name={icon} /> {title}
         {badge === "" ? null : <span class={styles["badge"] ?? ""}>{badge}</span>}
       </h2>
       <div class={styles["body"] ?? ""}>{children}</div>

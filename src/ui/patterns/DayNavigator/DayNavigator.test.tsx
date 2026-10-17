@@ -25,21 +25,19 @@ describe("DayNavigator", () => {
   it("shows the heading and moves to the previous day", () => {
     const { onPrevious } = setup();
     expect(screen.getByRole("heading", { level: 1, name: "Heute" })).toBeTruthy();
-    fireEvent.click(screen.getByRole("button", { name: "‹ Vortag" }));
+    fireEvent.click(screen.getByRole("button", { name: "Vortag" }));
     expect(onPrevious).toHaveBeenCalledOnce();
   });
 
   it("cannot go forward from today and offers no way back to today", () => {
     setup();
-    expect(screen.getByRole<HTMLButtonElement>("button", { name: "Folgetag ›" }).disabled).toBe(
-      true,
-    );
+    expect(screen.getByRole<HTMLButtonElement>("button", { name: "Folgetag" }).disabled).toBe(true);
     expect(screen.queryByRole("button", { name: "Zu heute" })).toBeNull();
   });
 
   it("goes forward and back to today from a past day", () => {
     const { onNext, onToday } = setup({ isToday: false, canGoNext: true });
-    fireEvent.click(screen.getByRole("button", { name: "Folgetag ›" }));
+    fireEvent.click(screen.getByRole("button", { name: "Folgetag" }));
     fireEvent.click(screen.getByRole("button", { name: "Zu heute" }));
     expect(onNext).toHaveBeenCalledOnce();
     expect(onToday).toHaveBeenCalledOnce();

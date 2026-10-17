@@ -9,6 +9,10 @@ import { DraftTextField } from "../../primitives/DraftTextField";
 import { Select } from "../../primitives/Select";
 import { useStore } from "../../StoreContext";
 import styles from "./Editor.module.css";
+import { ICON_NAMES } from "../../../domain/icons";
+import { iconName } from "../../../i18n/format";
+import { IconPicker } from "../../patterns/IconPicker";
+import { Icon } from "../../icons";
 
 export interface TrackerEditorProps {
   readonly trackerId: string;
@@ -23,8 +27,8 @@ export function TrackerEditor({ trackerId, onBack }: TrackerEditorProps) {
   if (!tracker) {
     return (
       <main class={styles["page"] ?? ""}>
-        <Button variant="ghost" onClick={onBack}>
-          {de.editor.back}
+        <Button variant="ghost" label={de.editor.backLabel} onClick={onBack}>
+          <Icon name="chevron_left" /> {de.editor.back}
         </Button>
       </main>
     );
@@ -48,8 +52,8 @@ export function TrackerEditor({ trackerId, onBack }: TrackerEditorProps) {
 
   return (
     <main class={styles["page"] ?? ""}>
-      <Button variant="ghost" onClick={onBack}>
-        {de.editor.back}
+      <Button variant="ghost" label={de.editor.backLabel} onClick={onBack}>
+        <Icon name="chevron_left" /> {de.editor.back}
       </Button>
       <h1 class={styles["title"] ?? ""}>{de.editor.title}</h1>
 
@@ -61,11 +65,13 @@ export function TrackerEditor({ trackerId, onBack }: TrackerEditorProps) {
             store.updateTracker(tracker.id, { title });
           }}
         />
-        <DraftTextField
+        <IconPicker
           label={de.editor.iconLabel}
           value={tracker.icon}
-          allowEmpty
-          onCommit={(icon) => {
+          names={ICON_NAMES}
+          nameOf={iconName}
+          noneLabel={de.editor.iconNone}
+          onChange={(icon) => {
             store.updateTracker(tracker.id, { icon });
           }}
         />

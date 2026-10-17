@@ -2,6 +2,7 @@ import type { Option } from "../../../domain/types";
 import { ColorSwatch } from "../ColorSwatch";
 import { ShapeIcon } from "../ShapeIcon";
 import styles from "./OptionChip.module.css";
+import { Icon } from "../../icons";
 
 export interface OptionChipProps {
   readonly label: string;
@@ -31,8 +32,9 @@ export function OptionChip({
       onClick={onClick}
     >
       {shape === "" ? <ColorSwatch color={color} /> : <ShapeIcon shape={shape} color={color} />}
-      {icon === "" ? null : <span aria-hidden="true">{icon}</span>}
+      {icon === "" ? null : <Icon name={icon} />}
       <span>{label}</span>
+      {selected ? <Icon name="check" class={styles["check"] ?? ""} /> : null}
     </button>
   );
 }

@@ -195,18 +195,18 @@ describe("tracker detail", () => {
     expect(screen.getByRole("button", { name: "17. Oktober: Sonnig" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "18. Oktober: nicht eingetragen" })).toBeTruthy();
     expect(screen.queryByRole("button", { name: /30\. Februar/ })).toBeNull();
-    const legendRow = screen.getByText("☀️ Sonnig").closest("li");
-    expect(legendRow?.textContent).toBe("☀️ Sonnig1");
+    const legendRow = screen.getByText("Sonnig").closest("li");
+    expect(legendRow?.textContent).toBe("Sonnig1");
 
     fireEvent.click(screen.getByRole("button", { name: /Vorjahr/ }));
     expect(screen.getByRole("region", { name: "Wetter 2025" })).toBeTruthy();
-    expect(screen.getByText("☀️ Sonnig").closest("li")?.textContent).toBe("☀️ Sonnig0");
+    expect(screen.getByText("Sonnig").closest("li")?.textContent).toBe("Sonnig0");
     fireEvent.click(screen.getByRole("button", { name: /Folgejahr/ }));
     expect(screen.getByRole<HTMLButtonElement>("button", { name: /Folgejahr/ }).disabled).toBe(
       true,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "‹ Tracker" }));
+    fireEvent.click(screen.getByRole("button", { name: "Zurück zur Trackerübersicht" }));
     expect(screen.getByRole("heading", { level: 1, name: "Tracker" })).toBeTruthy();
   });
 
@@ -224,7 +224,7 @@ describe("tracker detail", () => {
 
     expect(screen.queryByRole("dialog")).toBeNull();
     expect(screen.getByRole("button", { name: "5. März: Regen" })).toBeTruthy();
-    expect(screen.getByText("🌧️ Regen").closest("li")?.textContent).toBe("🌧️ Regen1");
+    expect(screen.getByText("Regen").closest("li")?.textContent).toBe("Regen1");
 
     await store.whenSaved();
     view.unmount();
@@ -449,7 +449,7 @@ describe("tracker editor", () => {
     expect(screen.getByRole("heading", { level: 1, name: "Tracker bearbeiten" })).toBeTruthy();
     expect(screen.getByLabelText<HTMLInputElement>("Name").value).toBe("Wetter");
     expect(screen.getAllByLabelText("Bezeichnung")).toHaveLength(7);
-    fireEvent.click(screen.getByRole("button", { name: "‹ Einstellungen" }));
+    fireEvent.click(screen.getByRole("button", { name: "Zurück zu den Einstellungen" }));
     expect(screen.getByRole("heading", { level: 1, name: "Einstellungen" })).toBeTruthy();
   });
 
@@ -458,7 +458,7 @@ describe("tracker editor", () => {
     fireEvent.click(screen.getByRole("button", { name: "Bearbeiten: Wetter" }));
     fireEvent.input(screen.getByLabelText("Name"), { target: { value: "Himmel" } });
     fireEvent.change(screen.getByLabelText("Ansicht"), { target: { value: "year-dots" } });
-    fireEvent.click(screen.getByRole("button", { name: "‹ Einstellungen" }));
+    fireEvent.click(screen.getByRole("button", { name: "Zurück zu den Einstellungen" }));
     expect(screen.getByRole("button", { name: "Bearbeiten: Himmel" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Tracker" }));
     expect(screen.getByRole("button", { name: /Himmel/ })).toBeTruthy();
@@ -495,7 +495,7 @@ describe("tracker editor", () => {
     fireEvent.click(screen.getByRole("button", { name: "Wirklich löschen" }));
     expect(screen.getAllByLabelText("Bezeichnung")).toHaveLength(6);
 
-    fireEvent.click(screen.getByRole("button", { name: "‹ Einstellungen" }));
+    fireEvent.click(screen.getByRole("button", { name: "Zurück zu den Einstellungen" }));
     fireEvent.click(screen.getByRole("button", { name: "Tracker" }));
     fireEvent.click(screen.getByRole("button", { name: /Wetter/ }));
     expect(screen.getByRole("button", { name: "17. Oktober: unbekannte Option" })).toBeTruthy();
@@ -525,7 +525,7 @@ describe("tracker editor", () => {
     expect(screen.getAllByLabelText("Bezeichnung")).toHaveLength(1);
     expect(screen.getByText("Die letzte Option kann nicht gelöscht werden.")).toBeTruthy();
 
-    fireEvent.click(screen.getByRole("button", { name: "‹ Einstellungen" }));
+    fireEvent.click(screen.getByRole("button", { name: "Zurück zu den Einstellungen" }));
     fireEvent.click(screen.getByRole("button", { name: "Heute" }));
     expect(screen.getByRole("region", { name: /Laune/ })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Option 1" })).toBeTruthy();
@@ -623,7 +623,7 @@ describe("habit board", () => {
     fireEvent.click(screen.getByRole("button", { name: "Bearbeiten: Haushalt-Board" }));
     const row = screen.getByRole("region", { name: "Schreibtisch aufräumen" });
     fireEvent.change(within(row).getByLabelText("Form"), { target: { value: "o" } });
-    fireEvent.click(screen.getByRole("button", { name: "‹ Einstellungen" }));
+    fireEvent.click(screen.getByRole("button", { name: "Zurück zu den Einstellungen" }));
     fireEvent.click(screen.getByRole("button", { name: "Tracker" }));
     const board = screen.getByTitle("Haushalt-Board Oktober 2026: 2 Blöcke").closest("svg");
     // The first habit is now a 2x2 square (4 cells) and the third (I) has 4 cells.

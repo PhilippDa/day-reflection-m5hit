@@ -1,4 +1,5 @@
 import { parseDateKey } from "../domain/dates";
+import { de } from "./de";
 
 const longDate = new Intl.DateTimeFormat("de-DE", {
   weekday: "long",
@@ -68,3 +69,9 @@ const weekdayShort = new Intl.DateTimeFormat("de-DE", { weekday: "short" });
 export const WEEKDAY_SHORT: readonly string[] = Array.from({ length: 7 }, (_unused, index) =>
   weekdayShort.format(new Date(2026, 5, 1 + index)),
 );
+
+/** Spoken name of a pickable icon. Anything else, such as an old emoji, is returned unchanged. */
+export function iconName(name: string): string {
+  const labels: Readonly<Record<string, string>> = de.icons;
+  return labels[name] ?? name;
+}
