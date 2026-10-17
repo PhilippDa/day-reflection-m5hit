@@ -4,7 +4,6 @@ import { DayNavigator } from "../../patterns/DayNavigator";
 import { OptionChips } from "../../patterns/OptionChips";
 import { TrackerCard } from "../../patterns/TrackerCard";
 import { Notice } from "../../primitives/Notice";
-import { TextArea } from "../../primitives/TextArea";
 import { useStore } from "../../StoreContext";
 import { LogItems } from "../log";
 import { PresetGallery } from "../presets";
@@ -76,13 +75,6 @@ export function TodayView() {
           />
         </TrackerCard>
       ))}
-
-      <TextArea
-        label={de.today.noteLabel}
-        placeholder={de.today.notePlaceholder}
-        value={day.note}
-        onInput={store.setNote}
-      />
     </main>
   );
 }

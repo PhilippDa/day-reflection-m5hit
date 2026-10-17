@@ -49,6 +49,8 @@ export const trackerSchema = v.pipe(
     kind: v.picklist(TRACKER_KINDS),
     view: v.picklist(TRACKER_VIEWS),
     options: v.array(optionSchema),
+    /** Log trackers only: "text" entries are a date and a text, without title or stars. */
+    entries: v.optional(v.picklist(["titled", "text"])),
   }),
   v.check(
     (tracker) => (VIEWS_BY_KIND[tracker.kind] as readonly string[]).includes(tracker.view),

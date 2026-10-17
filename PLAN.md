@@ -49,7 +49,7 @@ The **legend** is a list of options. Each option has a label, a color, an option
 
 Bottom tab bar with three tabs:
 
-1. **Heute** (today). One card per tracker. A choice tracker shows its legend as colored chips: tap one to set today, tap again to clear. A habit tracker shows chips you can switch on and off. A log tracker has "Eintrag hinzufügen". Trackers still empty today are marked open. The header shows "5 von 8 ausgefüllt". The date can be moved back (Vortag, Zu heute) to fill in a day you forgot. An optional note for the day sits at the bottom.
+1. **Heute** (today). One card per tracker. A choice tracker shows its legend as colored chips: tap one to set today, tap again to clear. A habit tracker shows chips you can switch on and off. A log tracker has "Eintrag hinzufügen". Trackers still empty today are marked open. The header shows "5 von 8 ausgefüllt". The date can be moved back (Vortag, Zu heute) to fill in a day you forgot. Notes are an own tracker (preset **Notizen**, a log tracker with date and text), not a field on this screen.
 2. **Trackers.** An overview list. Each tracker is a card with a small preview of its view. Tap a card to open the full tracker: the year grid, the month ring, the board or the list, plus its legend with counts ("Sonnig: 120 Tage") and year or month navigation. Tapping a day cell opens a bottom sheet to set or change that day.
 3. **Einstellungen.** Create a tracker from a preset or from scratch, edit titles, options and colors, reorder, delete (with confirmation). Backup export and import and the last-export reminder: unchanged from phase 1.
 
@@ -171,7 +171,7 @@ Every milestone ends with `npm run check` green and, for UI, a check in headless
 
 1. **Keep the evening review?** Default: **no**. The day note and the rating tracker replace it. Say so if you want the review screen (summary, reflection text, "finish the day") back.
 2. **Which presets are on at first start?** Default: **none**. The first start shows a gallery where you tick the ones you want. Alternative: preload Haushalt-Board, Duschen, Tagesbewertung, Schlaf and Filme.
-3. **Day note.** Default: **one optional note per day**, shown on Today. A note per tracker per day is possible but doubles the editing UI.
+3. **Day note.** Replaced later by the **Notizen** tracker (several entries per day, date and text). Old day notes become entries when that tracker is added. Originally: one optional note per day, shown on Today. A note per tracker per day is possible but doubles the editing UI.
 4. **Habit board in the first version?** Default: **yes, last** (T6). It is the most complex piece. It can be dropped without touching the rest.
 5. **Steps tracker as numbers?** Default: **choose a range** (0 to 3k and so on), like on the page. Typing the step count and mapping it to a range could come later.
 6. **No migration from phase 1.** Default: **drop it**, since nothing was deployed. Tell me if you have real data in a browser that must be kept.

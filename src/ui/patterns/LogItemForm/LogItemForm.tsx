@@ -18,6 +18,8 @@ export interface LogItemFormProps {
   readonly values: LogItemValues;
   /** Latest day that can be picked. */
   readonly maxDate: string;
+  /** "text" shows only date and text, without title and stars. */
+  readonly entries?: "titled" | "text";
   readonly canSave: boolean;
   readonly onChange: (patch: Partial<LogItemValues>) => void;
   readonly onSave: () => void;
@@ -29,11 +31,13 @@ export interface LogItemFormProps {
 export function LogItemForm({
   values,
   maxDate,
+  entries = "titled",
   canSave,
   onChange,
   onSave,
   onDelete,
 }: LogItemFormProps) {
+  const text = entries === "text";
   return (
     <form
       class={styles["form"] ?? ""}
@@ -44,13 +48,15 @@ export function LogItemForm({
         }
       }}
     >
-      <TextField
-        label={de.log.titleLabel}
-        value={values.title}
-        onInput={(title) => {
-          onChange({ title });
-        }}
-      />
+      {text ? null : (
+        <TextField
+          label={de.log.titleLabel}
+          value={values.title}
+          onInput={(title) => {
+            onChange({ title });
+          }}
+        />
+      )}
       <DateField
         label={de.log.dateLabel}
         value={values.date}
@@ -59,16 +65,18 @@ export function LogItemForm({
           onChange({ date });
         }}
       />
-      <StarRating
-        label={de.log.ratingLabel}
-        value={values.rating}
-        starLabel={de.log.star}
-        onChange={(rating) => {
-          onChange({ rating });
-        }}
-      />
+      {text ? null : (
+        <StarRating
+          label={de.log.ratingLabel}
+          value={values.rating}
+          starLabel={de.log.star}
+          onChange={(rating) => {
+            onChange({ rating });
+          }}
+        />
+      )}
       <TextArea
-        label={de.log.noteLabel}
+        label={text ? de.log.textLabel : de.log.noteLabel}
         value={values.note}
         onInput={(note) => {
           onChange({ note });

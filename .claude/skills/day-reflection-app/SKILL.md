@@ -91,7 +91,7 @@ Rules:
 
 ## UI scope (phase 2)
 
-- **Heute (today):** one card per tracker. `choice`: legend chips, tap to set, tap again to clear. `habits`: chips to switch on and off. `log`: "Eintrag hinzufügen". Open trackers are marked, the header shows how many are filled. Day navigation back in time, never past today. One optional note per day.
+- **Heute (today):** one card per tracker. `choice`: legend chips, tap to set, tap again to clear. `habits`: chips to switch on and off. `log`: "Eintrag hinzufügen". Open trackers are marked, the header shows how many are filled. Day navigation back in time, never past today. Notes are the preset `Notizen`: a `log` tracker with `entries: "text"` (date and text, no title or stars). There is no separate note field on Today. Adding that tracker turns old day notes (`days[date].note`) into entries and clears them (`adoptDayNotes`).
 - **Trackers:** overview cards with a small preview. The detail screen shows the full view (year grid, month ring, stamps, board or list), the legend with counts, year or month navigation, and a bottom sheet to edit a tapped day.
 - **Einstellungen:** create a tracker from a preset or from scratch, edit title, emoji, view and options (label, color, icon), reorder, delete. Export, import, last-export date.
 - **First start:** a gallery of presets to tick. No tracker is preloaded. The period preset is never selected by default.

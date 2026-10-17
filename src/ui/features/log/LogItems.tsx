@@ -1,4 +1,5 @@
 import { useState } from "preact/hooks";
+import { isTextTracker } from "../../../domain/logs";
 import type { LogItem, Tracker } from "../../../domain/types";
 import { de } from "../../../i18n/de";
 import { formatDateLong } from "../../../i18n/format";
@@ -22,6 +23,7 @@ function ratingText(rating: number): string {
 export function LogItems({ tracker, items, defaultDate }: LogItemsProps) {
   // "new" opens an empty form, an item opens it for editing, null keeps the sheet closed.
   const [editing, setEditing] = useState<LogItem | "new" | null>(null);
+  const text = isTextTracker(tracker);
   return (
     <div class={styles["items"] ?? ""}>
       {items.length === 0 ? <p class={styles["empty"] ?? ""}>{de.log.empty}</p> : null}
@@ -32,7 +34,11 @@ export function LogItems({ tracker, items, defaultDate }: LogItemsProps) {
           date={formatDateLong(item.date)}
           rating={item.rating}
           note={item.note}
-          editLabel={`${de.log.edit(item.title)}, ${ratingText(item.rating)}`}
+          editLabel={
+            text
+              ? de.log.editNote(formatDateLong(item.date))
+              : `${de.log.edit(item.title)}, ${ratingText(item.rating)}`
+          }
           onEdit={() => {
             setEditing(item);
           }}

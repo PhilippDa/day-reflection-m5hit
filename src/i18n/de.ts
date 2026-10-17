@@ -45,8 +45,6 @@ export const de = {
       `${String(filled)} von ${String(total)} ausgefüllt`,
     open: "Offen",
     chosen: "Gewählt",
-    noteLabel: "Notiz zum Tag",
-    notePlaceholder: "Was war besonders an diesem Tag?",
     unknownOption: "Unbekannt",
   },
   gallery: {
@@ -99,6 +97,8 @@ export const de = {
     star: (stars: number) => `${String(stars)} ${stars === 1 ? "Stern" : "Sterne"}`,
     itemCount: (count: number) => `${String(count)} ${count === 1 ? "Eintrag" : "Einträge"}`,
     edit: (title: string) => `Bearbeiten: ${title}`,
+    editNote: (date: string) => `Notiz bearbeiten: ${date}`,
+    textLabel: "Text",
   },
   editor: {
     title: "Tracker bearbeiten",

@@ -18,6 +18,8 @@ export interface Preset {
   readonly kind: TrackerKind;
   readonly view: TrackerView;
   readonly options: readonly PresetOption[];
+  /** Log presets only: "text" for entries that are just a date and a text. */
+  readonly entries?: "text";
   /** Health data: listed like the others but never selected by default. */
   readonly sensitive?: boolean;
 }
@@ -143,6 +145,16 @@ export const PRESETS: readonly Preset[] = [
     options: [],
   },
   {
+    key: "notes",
+    title: "Notizen",
+    icon: "📝",
+    description: "Kurze Notizen zu deinem Tag, mit Datum.",
+    kind: "log",
+    view: "list",
+    options: [],
+    entries: "text",
+  },
+  {
     key: "household",
     title: "Haushalt-Board",
     icon: "🧹",
@@ -197,5 +209,6 @@ export function createTrackerFromPreset(preset: Preset, newId: IdFactory): Track
     kind: preset.kind,
     view: preset.view,
     options,
+    ...(preset.entries ? { entries: preset.entries } : {}),
   };
 }

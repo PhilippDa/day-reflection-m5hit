@@ -28,3 +28,13 @@
 .note {
   font-size: 0.9375rem;
 }
+
+.clamped {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}

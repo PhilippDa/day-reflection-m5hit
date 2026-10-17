@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { createEmptyDocument } from "../domain/defaults";
 import { documentWith } from "../domain/fixtures";
-import { setChoice } from "../domain/marks";
+import { setChoice, setNote } from "../domain/marks";
 import type { ExportEnvironment } from "../storage/backup";
 import { createMemoryPort } from "../storage/memory";
 import type { StoragePort } from "../storage/port";
@@ -70,7 +70,6 @@ describe("store loading", () => {
     expect(store.loadError.value).toMatchObject({ code: "invalid" });
 
     store.addPresets(["weather"]);
-    store.setNote("Etwas");
     await store.whenSaved();
     expect(await port.read("current")).toEqual({ version: 2, trackers: "kaputt" });
   });
@@ -139,26 +138,18 @@ describe("store trackers and picks", () => {
     expect(store.daily.value.map((tracker) => tracker.title)).toEqual(["Wetter"]);
   });
 
-  it("writes the day note and removes an emptied day", async () => {
-    const { store, repository } = setup();
-    await store.load();
-    store.setNote("Spaziergang");
-    expect(store.day.value.note).toBe("Spaziergang");
-    store.setNote("");
-    await store.whenSaved();
-    const saved = await repository.load();
-    expect(saved.ok && saved.value.days).toEqual({});
-  });
-
   it("persists every change, in order", async () => {
     const { store, repository, tracker, option } = await withWeather();
     store.toggleChoice(tracker.id, option.id);
-    store.setNote("Notiz");
+    store.updateTracker(tracker.id, { title: "Himmel" });
     await store.whenSaved();
     const saved = await repository.load();
     expect(saved).toMatchObject({
       ok: true,
-      value: { days: { [TODAY]: { marks: { [tracker.id]: [option.id] }, note: "Notiz" } } },
+      value: {
+        trackers: [{ title: "Himmel" }],
+        days: { [TODAY]: { marks: { [tracker.id]: [option.id] } } },
+      },
     });
   });
 
@@ -172,7 +163,6 @@ describe("store trackers and picks", () => {
       },
     });
     await store.load();
-    store.setNote("");
     store.toggleChoice("trk_unknown", "opt_unknown");
     await store.whenSaved();
     expect(write).not.toHaveBeenCalled();
@@ -194,7 +184,7 @@ describe("store trackers and picks", () => {
     expect(store.day.value.marks[tracker.id]).toEqual([option.id]);
 
     failing = false;
-    store.setNote("wieder da");
+    store.toggleChoice(tracker.id, option.id);
     await store.whenSaved();
     expect(store.saveFailed.value).toBe(false);
   });
@@ -202,7 +192,7 @@ describe("store trackers and picks", () => {
   it("ignores actions before the data is loaded", () => {
     const { store } = setup();
     store.addPresets(["weather"]);
-    store.setNote("zu früh");
+    store.toggleChoice("trk_x", "opt_x");
     expect(store.trackers.value).toEqual([]);
   });
 });
@@ -686,5 +676,83 @@ describe("habit board", () => {
     expect(store.habitBoard.value.blocks[0]?.cells).toHaveLength(1);
     store.updateOption(tracker.id, first?.id ?? "", { shape: "o" });
     expect(store.habitBoard.value.blocks[0]?.cells).toHaveLength(4);
+  });
+});
+
+async function withNotes() {
+  const result = setup();
+  await result.store.load();
+  result.store.addPresets(["notes"]);
+  const tracker = result.store.logTrackers.value[0];
+  if (!tracker) {
+    throw new Error("preset missing");
+  }
+  return { ...result, tracker };
+}
+
+describe("notes tracker", () => {
+  it("is a list tracker with text-only entries", async () => {
+    const { tracker } = await withNotes();
+    expect(tracker).toMatchObject({ title: "Notizen", kind: "log", view: "list", entries: "text" });
+  });
+
+  it("keeps entries that are only a date and a text", async () => {
+    const { store, tracker } = await withNotes();
+    store.addLogItem(tracker.id, { date: TODAY, title: "ignoriert", rating: 4, note: "Regen" });
+    store.addLogItem(tracker.id, { date: TODAY, title: "Leer", rating: 0, note: "  " });
+    expect(store.dayLogItems.value[tracker.id]).toMatchObject([
+      { title: "", rating: 0, note: "Regen" },
+    ]);
+    const item = store.dayLogItems.value[tracker.id]?.[0];
+    store.updateLogItem(item?.id ?? "", { note: "" });
+    expect(store.dayLogItems.value[tracker.id]?.[0]?.note).toBe("Regen");
+    store.updateLogItem(item?.id ?? "", { note: "Sonne", title: "x", rating: 3 });
+    expect(store.dayLogItems.value[tracker.id]).toMatchObject([
+      { title: "", rating: 0, note: "Sonne" },
+    ]);
+  });
+});
+
+function oldNotes() {
+  let doc = documentWith("weather");
+  doc = setNote(doc, "2026-10-01", "Erster");
+  doc = setNote(doc, "2026-10-17", "Heute");
+  return setChoice(doc, "2026-10-17", "trk_weather", "opt_weather_1");
+}
+
+describe("old day notes", () => {
+  it("become entries when the notes tracker is added, and are not copied twice", async () => {
+    const port = createMemoryPort();
+    await port.write("current", oldNotes());
+    const { store, repository } = setup({ port });
+    await store.load();
+    expect(store.logTrackers.value).toEqual([]);
+
+    store.addPresets(["notes"]);
+    const tracker = store.logTrackers.value[0];
+    store.openTracker(tracker?.id ?? "");
+    expect(store.openedLogItems.value).toMatchObject([
+      { date: "2026-10-17", title: "", note: "Heute" },
+      { date: "2026-10-01", title: "", note: "Erster" },
+    ]);
+
+    store.addPresets(["notes"]);
+    expect(store.openedLogItems.value).toHaveLength(2);
+    await store.whenSaved();
+    const saved = await repository.load();
+    expect(saved.ok && saved.value.days).toEqual({
+      [TODAY]: { marks: { trk_weather: ["opt_weather_1"] }, note: "" },
+    });
+  });
+
+  it("stay untouched without a notes tracker", async () => {
+    const port = createMemoryPort();
+    await port.write("current", oldNotes());
+    const { store, repository } = setup({ port });
+    await store.load();
+    store.addPresets(["stress"]);
+    await store.whenSaved();
+    const saved = await repository.load();
+    expect(saved.ok && saved.value.days["2026-10-01"]?.note).toBe("Erster");
   });
 });

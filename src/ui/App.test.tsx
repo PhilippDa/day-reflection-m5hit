@@ -117,22 +117,13 @@ describe("App", () => {
     expect(screen.getByText("1 von 1 ausgefüllt")).toBeTruthy();
   });
 
-  it("keeps a note per day", async () => {
+  it("has no plain note field on Today anymore", async () => {
     const { store } = setup();
     await store.load();
     await screen.findByRole("heading", { level: 1, name: "Womit möchtest du starten?" });
     await addPresets("Wetter");
-    fireEvent.input(await screen.findByRole("textbox", { name: "Notiz zum Tag" }), {
-      target: { value: "Spaziergang am See" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /Vortag/ }));
-    expect(screen.getByRole<HTMLTextAreaElement>("textbox", { name: "Notiz zum Tag" }).value).toBe(
-      "",
-    );
-    fireEvent.click(screen.getByRole("button", { name: /Folgetag/ }));
-    expect(screen.getByRole<HTMLTextAreaElement>("textbox", { name: "Notiz zum Tag" }).value).toBe(
-      "Spaziergang am See",
-    );
+    await screen.findByRole("region", { name: /Wetter/ });
+    expect(screen.queryByRole("textbox")).toBeNull();
   });
 
   it("navigates between the three tabs and adds trackers from settings", async () => {
@@ -311,6 +302,45 @@ async function addMovie(title: string, stars: number) {
   }
   fireEvent.click(within(dialog).getByRole("button", { name: "Speichern" }));
 }
+
+async function openNotes() {
+  const { store } = setup();
+  await store.load();
+  await screen.findByRole("heading", { level: 1, name: "Womit möchtest du starten?" });
+  await addPresets("Notizen");
+  await screen.findByRole("region", { name: /Notizen/ });
+}
+
+describe("notes tracker", () => {
+  it("adds a note with only a date and a text, and edits and deletes it", async () => {
+    await openNotes();
+    fireEvent.click(screen.getByRole("button", { name: "Eintrag hinzufügen" }));
+    const dialog = screen.getByRole("dialog", { name: "Neuer Eintrag" });
+    expect(within(dialog).queryByLabelText("Titel")).toBeNull();
+    expect(within(dialog).queryByRole("group", { name: "Bewertung" })).toBeNull();
+    const save = within(dialog).getByRole("button", { name: "Speichern" });
+    expect(save.hasAttribute("disabled")).toBe(true);
+    fireEvent.input(within(dialog).getByLabelText("Text"), {
+      target: { value: "Spaziergang am See" },
+    });
+    fireEvent.click(save);
+    expect(screen.queryByRole("dialog")).toBeNull();
+
+    const row = screen.getByRole("button", { name: "Notiz bearbeiten: Samstag, 17. Oktober 2026" });
+    expect(row.textContent).toContain("Spaziergang am See");
+    fireEvent.click(row);
+    const editor = screen.getByRole("dialog", { name: "Eintrag bearbeiten" });
+    fireEvent.input(within(editor).getByLabelText("Text"), { target: { value: "Am Fluss" } });
+    fireEvent.click(within(editor).getByRole("button", { name: "Speichern" }));
+    expect(screen.getByText("Am Fluss")).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: /Notiz bearbeiten/ }));
+    const again = screen.getByRole("dialog");
+    fireEvent.click(within(again).getByRole("button", { name: "Löschen" }));
+    fireEvent.click(within(again).getByRole("button", { name: "Wirklich löschen" }));
+    expect(screen.getByText("Noch keine Einträge.")).toBeTruthy();
+  });
+});
 
 describe("log trackers", () => {
   it("shows a list card on Today without a misleading progress line", async () => {

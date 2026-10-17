@@ -16,7 +16,8 @@ import {
   updateLogItem,
   type LogItemPatch,
 } from "../domain/logs";
-import { setNote, toggleChoice, toggleHabit } from "../domain/marks";
+import { adoptDayNotes } from "../domain/adopt";
+import { toggleChoice, toggleHabit } from "../domain/marks";
 import type { ImportMode } from "../domain/merge";
 import type { ParseError } from "../domain/parse";
 import { createTrackerFromPreset, PRESETS } from "../domain/presets";
@@ -187,7 +188,6 @@ export interface Store {
    */
   readonly toggleChoice: (trackerId: string, optionId: string, dateKey?: string) => void;
   readonly toggleHabit: (trackerId: string, optionId: string, dateKey?: string) => void;
-  readonly setNote: (note: string) => void;
   /** Creates a tracker and returns its id, or `null` when the draft is not valid. */
   readonly createTracker: (draft: TrackerDraft) => string | null;
   readonly updateTracker: (trackerId: string, patch: TrackerPatch) => void;
@@ -206,7 +206,10 @@ export interface Store {
   readonly addLogItem: (trackerId: string, draft: LogItemDraft) => void;
   readonly updateLogItem: (itemId: string, patch: LogItemPatch) => void;
   readonly deleteLogItem: (itemId: string) => void;
-  /** Adds one tracker per preset key. Unknown keys are ignored. */
+  /**
+   * Adds one tracker per preset key. Unknown keys are ignored. Adding the notes tracker also turns
+   * the old day notes into entries.
+   */
   readonly addPresets: (keys: readonly string[]) => void;
   /** Shares or downloads the backup file. "failed" means nothing was delivered. */
   readonly exportBackup: () => Promise<ExportOutcome | "failed">;
@@ -534,10 +537,6 @@ export function createStore(deps: StoreDeps): Store {
       change((doc) => toggleHabit(doc, dateKey, trackerId, optionId));
     },
 
-    setNote(note) {
-      change((doc) => setNote(doc, selectedDate.value, note));
-    },
-
     createTracker(draft) {
       const current = document.value;
       if (!current) {
@@ -617,9 +616,12 @@ export function createStore(deps: StoreDeps): Store {
     addPresets(keys) {
       const chosen = PRESETS.filter((preset) => keys.includes(preset.key));
       change((doc) =>
-        chosen.reduce(
-          (next, preset) => addTracker(next, createTrackerFromPreset(preset, newId)),
-          doc,
+        adoptDayNotes(
+          chosen.reduce(
+            (next, preset) => addTracker(next, createTrackerFromPreset(preset, newId)),
+            doc,
+          ),
+          newId,
         ),
       );
     },
@@ -668,6 +670,8 @@ export function createStore(deps: StoreDeps): Store {
       try {
         document.value = await importDocument(repository, current, pending.incoming, mode);
         saveFailed.value = false;
+        // Notes from an older backup become entries of the notes tracker, when there is one.
+        change((doc) => adoptDayNotes(doc, newId));
       } catch {
         saveFailed.value = true;
       }

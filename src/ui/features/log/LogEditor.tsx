@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import { isDateKey } from "../../../domain/dates";
+import { isTextTracker } from "../../../domain/logs";
 import type { LogItem, Tracker } from "../../../domain/types";
 import { de } from "../../../i18n/de";
 import { LogItemForm, type LogItemValues } from "../../patterns/LogItemForm";
@@ -24,7 +25,9 @@ export function LogEditor({ tracker, item, defaultDate, onClose }: LogEditorProp
     rating: item?.rating ?? 0,
     note: item?.note ?? "",
   });
-  const canSave = values.title.trim() !== "" && isDateKey(values.date);
+  const text = isTextTracker(tracker);
+  const canSave =
+    (text ? values.note.trim() : values.title.trim()) !== "" && isDateKey(values.date);
 
   function save() {
     if (item) {
@@ -44,6 +47,7 @@ export function LogEditor({ tracker, item, defaultDate, onClose }: LogEditorProp
       <LogItemForm
         values={values}
         maxDate={store.todayKey.value}
+        entries={text ? "text" : "titled"}
         canSave={canSave}
         onChange={(patch) => {
           setValues((current) => ({ ...current, ...patch }));
