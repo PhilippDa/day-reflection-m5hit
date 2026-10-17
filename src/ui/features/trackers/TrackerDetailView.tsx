@@ -67,6 +67,8 @@ export function TrackerDetailView({ tracker }: { readonly tracker: Tracker }) {
   const isBoard = tracker.view === "board";
   const isMonthView = isRing || isStamps || isBoard;
   const counts = isMonthView ? store.monthCounts.value : store.yearCounts.value;
+  // Remounting replays the intro, so a new tracker, year or month fades in again.
+  const introKey = `${tracker.id}-${isMonthView ? `${String(monthYear)}-${String(month)}` : String(year)}`;
   const gridLabel = isMonthView
     ? de.trackers.gridLabel(tracker.title, formatMonthYear(monthYear, month))
     : de.trackers.gridLabel(tracker.title, String(year));
@@ -104,6 +106,7 @@ export function TrackerDetailView({ tracker }: { readonly tracker: Tracker }) {
 
       {isRing ? (
         <MonthRing
+          key={introKey}
           cells={store.monthCells.value}
           title={formatMonthName(month)}
           subtitle={String(monthYear)}
@@ -114,6 +117,7 @@ export function TrackerDetailView({ tracker }: { readonly tracker: Tracker }) {
       ) : null}
       {isStamps ? (
         <MonthStamps
+          key={introKey}
           cells={store.monthCells.value}
           offset={weekdayOffset(monthYear, month)}
           weekdays={WEEKDAY_SHORT}
@@ -124,6 +128,7 @@ export function TrackerDetailView({ tracker }: { readonly tracker: Tracker }) {
       ) : null}
       {tracker.view === "year-squares" || tracker.view === "year-dots" ? (
         <YearGrid
+          key={introKey}
           cells={store.yearCells.value}
           variant={tracker.view === "year-dots" ? "dots" : "squares"}
           monthLabels={MONTH_INITIALS}
@@ -142,6 +147,7 @@ export function TrackerDetailView({ tracker }: { readonly tracker: Tracker }) {
       {isBoard ? (
         <>
           <HabitBoard
+            key={introKey}
             layout={store.habitBoard.value}
             colorOf={(item) =>
               tracker.options.find((option) => option.id === item.optionId)?.color ?? UNKNOWN_COLOR
@@ -151,6 +157,7 @@ export function TrackerDetailView({ tracker }: { readonly tracker: Tracker }) {
           <section class={styles["legend"] ?? ""} aria-labelledby={daysId}>
             <h2 id={daysId}>{de.habits.daysHeading}</h2>
             <DayStrip
+              key={introKey}
               days={store.habitDays.value}
               label={gridLabel}
               dayLabel={(day) => de.habits.dayLabel(formatDayMonth(day.dateKey), day.count)}

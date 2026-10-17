@@ -1,3 +1,5 @@
+import { introVars, useIntro } from "../../intro";
+import intro from "../../intro.module.css";
 import styles from "./DayStrip.module.css";
 
 export interface StripDay {
@@ -16,13 +18,16 @@ export interface DayStripProps {
 
 /** The days of a month as buttons, each with how many things were done. Tap to edit that day. */
 export function DayStrip({ days, label, dayLabel, onSelect }: DayStripProps) {
+  const done = days.filter((day) => day.count > 0);
+  const playing = useIntro(done.length);
   return (
-    <section class={styles["strip"] ?? ""} aria-label={label}>
+    <section class={styles["strip"] ?? ""} style={introVars(done.length)} aria-label={label}>
       {days.map((day) => (
         <button
           key={day.dateKey}
           type="button"
-          class={`${styles["day"] ?? ""} ${day.count > 0 ? (styles["done"] ?? "") : ""}`}
+          class={`${styles["day"] ?? ""} ${day.count > 0 ? (styles["done"] ?? "") : ""} ${playing && day.count > 0 ? (intro["pop"] ?? "") : ""}`}
+          style={{ "--i": done.indexOf(day) }}
           aria-label={dayLabel(day)}
           onClick={() => {
             onSelect(day.dateKey);

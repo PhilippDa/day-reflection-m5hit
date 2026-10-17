@@ -1,0 +1,39 @@
+/* Cells that fade in one after another when a view appears. Needs `--step` on a parent and `--i` on the cell. */
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+}
+
+.pop,
+.drop {
+  animation-duration: 300ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: backwards;
+  animation-delay: calc(var(--i, 0) * var(--step, 0ms));
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.pop {
+  animation-name: pop;
+}
+
+.drop {
+  animation-name: drop;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop,
+  .drop {
+    animation: none;
+  }
+}

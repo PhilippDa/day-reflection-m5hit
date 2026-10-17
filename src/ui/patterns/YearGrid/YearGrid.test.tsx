@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/preact";
+import { act, fireEvent, render, screen } from "@testing-library/preact";
 import { describe, expect, it, vi } from "vitest";
 import { yearCells } from "../../../domain/cells";
 import { documentWith } from "../../../domain/fixtures";
@@ -56,5 +56,27 @@ describe("YearGrid", () => {
   it("also draws the dots variant", () => {
     grid(() => undefined, "dots");
     expect(screen.getAllByRole("button")).toHaveLength(365);
+  });
+});
+
+describe("YearGrid intro", () => {
+  it("fades in the filled cells in date order, then settles", async () => {
+    vi.useFakeTimers();
+    try {
+      grid();
+      const first = screen.getByRole("button", { name: "2026-10-17|marked" });
+      const second = screen.getByRole("button", { name: "2026-10-18|unknown" });
+      const empty = screen.getByRole("button", { name: "2026-01-01|empty" });
+      expect(first.className).toMatch(/pop/);
+      expect(first.style.getPropertyValue("--i")).toBe("0");
+      expect(second.style.getPropertyValue("--i")).toBe("1");
+      expect(empty.className).not.toMatch(/pop/);
+      await act(() => {
+        vi.advanceTimersByTime(1500);
+      });
+      expect(first.className).not.toMatch(/pop/);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

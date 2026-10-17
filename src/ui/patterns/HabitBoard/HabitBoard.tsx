@@ -1,4 +1,6 @@
 import { blockEdges, type BoardLayout, type HabitBoardItem } from "../../../domain/board";
+import { introVars, useIntro } from "../../intro";
+import intro from "../../intro.module.css";
 import styles from "./HabitBoard.module.css";
 
 export interface HabitBoardProps {
@@ -18,15 +20,20 @@ const MIN_ROWS = 6;
  */
 export function HabitBoard({ layout, colorOf, label }: HabitBoardProps) {
   const rows = Math.max(layout.height, MIN_ROWS);
+  const playing = useIntro(layout.blocks.length);
   return (
-    <svg class={styles["board"] ?? ""} viewBox={`0 0 ${String(layout.width)} ${String(rows)}`}>
+    <svg
+      class={styles["board"] ?? ""}
+      style={introVars(layout.blocks.length)}
+      viewBox={`0 0 ${String(layout.width)} ${String(rows)}`}
+    >
       <title>{label}</title>
       <rect class={styles["field"] ?? ""} width={layout.width} height={rows} />
-      {layout.blocks.map((block) => (
+      {layout.blocks.map((block, index) => (
         <g
           key={block.item.key}
-          class={styles["block"] ?? ""}
-          style={{ "--block": colorOf(block.item) }}
+          class={`${styles["block"] ?? ""} ${playing ? (intro["drop"] ?? "") : ""}`}
+          style={{ "--block": colorOf(block.item), "--i": index }}
         >
           {block.cells.map((cell) => (
             <rect

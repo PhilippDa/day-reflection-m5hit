@@ -1,6 +1,8 @@
 import type { TrackerCell } from "../../../domain/cells";
 import { readableInk } from "../../../domain/color";
 import { ringSegments } from "../../../domain/ring";
+import { introVars, useIntro } from "../../intro";
+import intro from "../../intro.module.css";
 import styles from "./MonthRing.module.css";
 
 export interface MonthRingProps {
@@ -29,9 +31,15 @@ const RING = {
 /** A month as a ring of day segments, day 1 at the top. Every segment is a keyboard-reachable button. */
 export function MonthRing({ cells, title, subtitle, label, cellLabel, onSelect }: MonthRingProps) {
   const segments = ringSegments(cells.length, RING);
+  const filled = cells.filter((cell) => cell.status !== "empty" && cell.dateKey !== null);
+  const playing = useIntro(filled.length);
   return (
     <section class={styles["wrapper"] ?? ""} aria-label={label}>
-      <svg class={styles["ring"] ?? ""} viewBox={`0 0 ${String(SIZE)} ${String(SIZE)}`}>
+      <svg
+        class={styles["ring"] ?? ""}
+        style={introVars(filled.length)}
+        viewBox={`0 0 ${String(SIZE)} ${String(SIZE)}`}
+      >
         {segments.map((segment) => {
           const cell = cells[segment.index];
           if (!cell || cell.dateKey === null) {
@@ -39,14 +47,19 @@ export function MonthRing({ cells, title, subtitle, label, cellLabel, onSelect }
           }
           const { dateKey } = cell;
           const color = cell.option?.color;
+          const animated = playing && cell.status !== "empty";
+          const index = animated ? filled.indexOf(cell) : 0;
           const select = () => {
             onSelect(dateKey);
           };
           return (
             <g
               key={dateKey}
-              class={`${styles["segment"] ?? ""} ${styles[cell.status] ?? ""}`}
-              style={color ? { "--cell": color, "--on-cell": readableInk(color) } : undefined}
+              class={`${styles["segment"] ?? ""} ${styles[cell.status] ?? ""} ${animated ? (intro["pop"] ?? "") : ""}`}
+              style={{
+                ...(color ? { "--cell": color, "--on-cell": readableInk(color) } : {}),
+                "--i": index,
+              }}
               // SVG shapes have no native button element, so the role is needed here.
               // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
               role="button"

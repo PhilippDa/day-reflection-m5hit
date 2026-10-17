@@ -1,4 +1,6 @@
 import type { TrackerCell } from "../../../domain/cells";
+import { introVars, useIntro } from "../../intro";
+import intro from "../../intro.module.css";
 import styles from "./MonthStamps.module.css";
 
 export interface MonthStampsProps {
@@ -14,9 +16,14 @@ export interface MonthStampsProps {
 }
 
 /** A paw print: four toes and a pad. */
-function Paw() {
+function Paw({ animated, index }: { readonly animated: boolean; readonly index: number }) {
   return (
-    <svg class={styles["paw"] ?? ""} viewBox="0 0 24 24" aria-hidden="true">
+    <svg
+      class={`${styles["paw"] ?? ""} ${animated ? (intro["pop"] ?? "") : ""}`}
+      style={{ "--i": index }}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
       <ellipse cx="12" cy="16.5" rx="5.8" ry="4.6" />
       <circle cx="4.8" cy="10.5" r="2.3" />
       <circle cx="9.2" cy="5.8" r="2.5" />
@@ -35,8 +42,10 @@ export function MonthStamps({
   cellLabel,
   onSelect,
 }: MonthStampsProps) {
+  const filled = cells.filter((cell) => cell.status !== "empty" && cell.dateKey !== null);
+  const playing = useIntro(filled.length);
   return (
-    <section class={styles["stamps"] ?? ""} aria-label={label}>
+    <section class={styles["stamps"] ?? ""} style={introVars(filled.length)} aria-label={label}>
       {weekdays.map((weekday) => (
         <span key={weekday} class={styles["weekday"] ?? ""} aria-hidden="true">
           {weekday}
@@ -59,7 +68,7 @@ export function MonthStamps({
               }
             }}
           >
-            <Paw />
+            <Paw animated={playing && cell.status !== "empty"} index={filled.indexOf(cell)} />
             <span class={styles["day"] ?? ""} aria-hidden="true">
               {cell.day}
             </span>
