@@ -1,0 +1,45 @@
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-3);
+  border: 1.5px solid var(--color-ink);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.icon {
+  flex: none;
+  font-size: 1.75rem;
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.title {
+  font-family: var(--font-hand);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.detail {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.chevron {
+  color: var(--color-muted);
+  font-size: 1.5rem;
+}

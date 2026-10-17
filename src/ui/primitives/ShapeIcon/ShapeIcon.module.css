@@ -1,0 +1,10 @@
+.icon {
+  flex: none;
+  /* Each cell is half a rem, so the longest shape (I) is 2rem wide. */
+  width: calc(var(--w) * 0.5rem);
+  height: calc(var(--h) * 0.5rem);
+  overflow: visible;
+  fill: var(--shape);
+  stroke: var(--color-ink);
+  stroke-width: 0.12;
+}

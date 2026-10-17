@@ -1,0 +1,68 @@
+.wrapper {
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.ring {
+  display: block;
+  width: 100%;
+}
+
+.segment {
+  cursor: pointer;
+}
+
+.shape {
+  fill: var(--color-surface);
+  stroke: var(--color-ink);
+  stroke-width: 1.5;
+}
+
+.marked .shape {
+  fill: var(--cell);
+}
+
+.unknown .shape {
+  fill: var(--color-border);
+}
+
+.segment:focus-visible {
+  outline: none;
+}
+
+.segment:focus-visible .shape {
+  stroke: var(--color-accent);
+  stroke-width: 4;
+}
+
+.day {
+  fill: var(--color-muted);
+  font-family: var(--font);
+  font-size: 13px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.marked .day {
+  fill: var(--on-cell);
+  font-weight: 700;
+}
+
+.title,
+.subtitle {
+  fill: var(--color-text);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.title {
+  font-family: var(--font-hand);
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.subtitle {
+  fill: var(--color-muted);
+  font-size: 18px;
+}

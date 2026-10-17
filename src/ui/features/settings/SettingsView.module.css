@@ -1,0 +1,29 @@
+.page {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-3);
+}
+
+.section {
+  margin-bottom: var(--space-4);
+}
+
+.heading {
+  margin: 0 0 var(--space-2);
+  font-size: 1.125rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.hint {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.spaced {
+  margin-top: var(--space-4);
+}

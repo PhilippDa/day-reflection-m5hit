@@ -1,0 +1,32 @@
+.group {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.legend {
+  padding: 0;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.stars {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.star {
+  width: var(--tap-min);
+  height: var(--tap-min);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.on {
+  color: var(--color-accent);
+}

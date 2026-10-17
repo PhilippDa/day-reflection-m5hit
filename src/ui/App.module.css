@@ -1,0 +1,10 @@
+/* Keeps the last content clear of the fixed tab bar. */
+.shell {
+  padding-bottom: calc(72px + env(safe-area-inset-bottom));
+}
+
+.reminder {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-3) 0;
+}

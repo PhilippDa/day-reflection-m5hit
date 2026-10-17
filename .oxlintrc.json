@@ -1,0 +1,50 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "jsx-a11y", "import", "unicorn", "vitest"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "typescript/no-explicit-any": "error",
+    "typescript/no-floating-promises": "error",
+    "react/react-in-jsx-scope": "off",
+    "import/no-unassigned-import": "off",
+    "import/no-named-as-default": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/domain/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": ["**/storage/**", "**/state/**", "**/ui/**"]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/storage/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": ["**/state/**", "**/ui/**"]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/state/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": ["**/ui/**"]
+          }
+        ]
+      }
+    }
+  ]
+}

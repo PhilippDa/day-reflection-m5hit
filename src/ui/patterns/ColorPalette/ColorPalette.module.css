@@ -1,0 +1,32 @@
+.group {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.legend {
+  padding: 0;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.75rem, 1fr));
+  gap: var(--space-1);
+}
+
+.swatch {
+  position: relative;
+  height: var(--tap-min);
+  padding: 0;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--swatch);
+  cursor: pointer;
+}
+
+.selected {
+  border: 3px solid var(--color-strong);
+  box-shadow: 0 0 0 2px var(--color-surface) inset;
+}

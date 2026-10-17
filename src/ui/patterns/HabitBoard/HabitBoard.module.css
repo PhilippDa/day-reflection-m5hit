@@ -1,0 +1,26 @@
+.board {
+  display: block;
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.field {
+  fill: var(--color-surface);
+  stroke: var(--color-ink);
+  stroke-width: 0.08;
+}
+
+.block rect {
+  fill: var(--block);
+  stroke: var(--color-ink);
+  stroke-opacity: 0.25;
+  stroke-width: 0.04;
+}
+
+.outline {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-linecap: square;
+  stroke-width: 0.12;
+}

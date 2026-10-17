@@ -1,0 +1,9 @@
+.navigator {
+  margin-bottom: var(--space-4);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

@@ -1,0 +1,14 @@
+.header {
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--color-muted);
+}

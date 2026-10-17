@@ -1,0 +1,33 @@
+.strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.75rem, 1fr));
+  gap: var(--space-1);
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-min);
+  padding: 0;
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.done {
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-accent-soft);
+  color: var(--color-text);
+}
+
+.count {
+  min-height: 1em;
+  font-size: 0.75rem;
+  font-weight: 700;
+}

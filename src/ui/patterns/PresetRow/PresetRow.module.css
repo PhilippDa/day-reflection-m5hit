@@ -1,0 +1,48 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-3);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.checked {
+  border-color: var(--color-strong);
+  background: var(--color-accent-soft);
+}
+
+.box {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: var(--color-accent);
+}
+
+.icon {
+  flex: none;
+  font-size: 1.75rem;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: var(--font-hand);
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.description {
+  font-size: 0.9375rem;
+}
+
+.meta {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}

@@ -1,0 +1,10 @@
+.control {
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-3);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  width: 100%;
+}

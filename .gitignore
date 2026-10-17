@@ -1,0 +1,5 @@
+node_modules
+dist
+coverage
+day-reflection-*.json
+.DS_Store
