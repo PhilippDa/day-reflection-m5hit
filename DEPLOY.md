@@ -1,6 +1,6 @@
 # Deploying Day Reflection to GitHub Pages
 
-The app is built with Vite into static files in `dist/`. A GitHub Actions workflow (`.github/workflows/deploy.yml`) runs the checks, builds, and publishes `dist/` to Pages on every push to `main`. If a check fails, nothing is deployed.
+The app is built with Vite into static files in `dist/`. A GitHub Actions workflow (`.github/workflows/deploy.yml`) runs the checks, builds, and publishes `dist/` to Pages on every push to `main`. Pushes to `develop` and pull requests only run the checks. If a check fails, nothing is deployed.
 
 ## 0. Know what "private" means here
 
@@ -56,11 +56,16 @@ Note: the Home Screen app and Safari have **separate storage**. Data you entered
 
 ## 6. Update the app later
 
+Work on `develop`. Every push there runs the checks and deploys nothing. When a change is ready to go live, merge it into `main`:
+
 ```sh
+git switch develop
 git add -A && git commit -m "Describe the change" && git push
+# ready to publish:
+git switch main && git merge --ff-only develop && git push && git switch develop
 ```
 
-The workflow checks, builds and redeploys in a few minutes. Run `npm run check` locally first, because the pre-commit hook and CI will reject a failing commit anyway. If the iPhone still shows the old version, fully close the app and reopen it. The service worker's cache name is derived from the build output, so it changes with every release. The installed app shows "Eine neue Version ist verfügbar" with a "Neu laden" button after the next time it is opened.
+After the push to `main`, the workflow checks, builds and redeploys in a few minutes. Run `npm run check` locally first, because the pre-commit hook and CI will reject a failing commit anyway. If the iPhone still shows the old version, fully close the app and reopen it. The service worker's cache name is derived from the build output, so it changes with every release. The installed app shows "Eine neue Version ist verfügbar" with a "Neu laden" button after the next time it is opened.
 
 ## 7. Troubleshooting
 

@@ -2,7 +2,7 @@ name: Check and deploy
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
   workflow_dispatch:
 
@@ -27,7 +27,8 @@ jobs:
 
   build:
     needs: check
-    if: github.event_name != 'pull_request'
+    # Only main goes live. develop and pull requests are checked, not deployed.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
